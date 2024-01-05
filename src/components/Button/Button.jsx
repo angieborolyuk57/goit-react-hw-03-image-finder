@@ -4,6 +4,7 @@ import css from './Button.module.css';
 
 const Button = ({ onLoadMore }) => {
   return (
+    <div className={css.btnContainer}> 
       <button
         type="button"
         className={css.Button}
@@ -13,6 +14,7 @@ const Button = ({ onLoadMore }) => {
       >
         Load more
       </button>
+      </div>
   );
 };
 
