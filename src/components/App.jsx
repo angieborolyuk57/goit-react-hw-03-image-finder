@@ -12,21 +12,25 @@ import {
   onSameRequest,
 } from 'api/api.js';
 
-export default class App extends Component {
-  state = {
-    modal: { isOpen: false, visibleData: null },
-    images: [],
-    isLoading: false,
-    searchQuery: 'love',
-    page: 1,
-    totalImages: 0,
-  };
+class App extends Component {
+  constructor(props) {
+    super(props);
 
-  async componentDidMount() {
+    this.state = {
+      modal: { isOpen: false, visibleData: null },
+      images: [],
+      isLoading: false,
+      searchQuery: 'love',
+      page: 1,
+      totalImages: 0,
+    };
+  }
+
+  componentDidMount() {
     this.fetchImages();
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (
       prevState.searchQuery !== this.state.searchQuery ||
       prevState.page !== this.state.page
@@ -34,13 +38,14 @@ export default class App extends Component {
       this.fetchImages();
     }
   }
+
   fetchImages = async () => {
     const { searchQuery, page } = this.state;
     try {
       this.setState({ isLoading: true });
       const response = await getImages(searchQuery, page);
       checkResponse(response, page);
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         images: [...prevState.images, ...response.hits],
         totalImages: response.totalHits,
       }));
@@ -51,7 +56,7 @@ export default class App extends Component {
     }
   };
 
-  onOpenModal = data => {
+  onOpenModal = (data) => {
     this.setState({
       modal: {
         isOpen: true,
@@ -66,7 +71,6 @@ export default class App extends Component {
     });
   };
 
-  
   onSubmit = (searchQuery, form) => {
     if (!searchQuery) {
       onInputEmpty();
@@ -87,12 +91,13 @@ export default class App extends Component {
   };
 
   onLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState((prevState) => ({ page: prevState.page + 1 }));
   };
 
   render() {
     const { isLoading, images, modal, totalImages } = this.state;
     const showButton = !isLoading && totalImages !== images.length;
+
     return (
       <div>
         {isLoading && <Loader />}
@@ -111,3 +116,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default App;
